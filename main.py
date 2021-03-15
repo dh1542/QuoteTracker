@@ -12,16 +12,35 @@ def getQuote(StockCode):
 	url = requests.get('https://finance.yahoo.com/quote/' + StockCode +'?p=' + StockCode)
 	soup = bs4.BeautifulSoup(url.text, features="html.parser")
 	price = soup.find_all("div", {'class': 'My(6px) Pos(r) smartphone_Mt(6px)'})[0].find('span').text
-	print(price + '$')
+	price = price.replace(",", "")
+	return float(price)
+	
 
 
 
 
 
-stockCode = input("Stocke Code: ")
+
+stockCode = validate(input("Stocke Code: "))
+
+oldPrice = 0
 
 while True:
-	getQuote(validate(stockCode))
+	price = getQuote(stockCode)
+	if(oldPrice == price):
+		print(str(price) + "$")
+		print("=")
+	elif(oldPrice > price):
+		print(str(price) + "$")
+		print("-")
+	else:
+		print(str(price) + "$")
+		print("+")
+
+	oldPrice = price 
+
+	
+
 
 
 
